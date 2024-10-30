@@ -12,6 +12,7 @@ def generate_prompt(user_input):
     if not user_input.strip():
         return "Please provide a valid input."
     
+    # Summarize previous conversations if any
     summary = "\n".join([f"User: {log['question']} AI: {log['response_summary']}" for log in conversation_log])
     prompt = f"{summary}\nUser: {user_input}\nAI:"
     return prompt
@@ -31,6 +32,8 @@ if user_input:
         try:
             model = genai.GenerativeModel('gemini-pro')  # Verify the model name
             response = model.generate_content(Question)
+
+            # Display the AI response
             st.write(f"**AI:** {response.text}")
 
             # Save interaction in conversation log
@@ -40,3 +43,4 @@ if user_input:
             })
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
+            st.error(f"Generated prompt: {Question}")  # Log the prompt for debugging
